@@ -76,7 +76,7 @@ export function DamageCalculator({ data }: { data: TftSet }) {
   return (
     <main className="min-h-[calc(100dvh-3.5rem)] bg-background text-foreground">
       <div className="border-b border-border bg-card/60 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <div className="mx-auto flex max-w-[90rem] items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Link href="/" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "text-muted-foreground")}>
             <ArrowLeft aria-hidden />
             Team builder
@@ -87,7 +87,7 @@ export function DamageCalculator({ data }: { data: TftSet }) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:py-8">
+      <div className="mx-auto max-w-[90rem] space-y-6 px-4 py-6 sm:px-6 lg:py-8">
         <header className="relative overflow-hidden rounded-md border border-border bg-card px-5 py-6 sm:px-7">
           <div className="pointer-events-none absolute inset-y-0 right-0 w-2/5 bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.14),transparent_68%)]" />
           <div className="relative flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
