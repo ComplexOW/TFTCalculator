@@ -221,7 +221,7 @@ export function ItemEffectControls({ data, attacker, defender, scenario, dispatc
         </div>
       </CardHeader>
       <CardContent className="space-y-5">
-        <div className="grid gap-3 lg:grid-cols-[1fr_1fr_1.1fr]">
+        <div className="grid gap-3">
           <label className="rounded-md border border-border bg-background/50 p-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
             <span className="flex items-center gap-2"><Clock3 className="size-3.5 text-sky-300" aria-hidden /> Combat duration</span>
             <div className="relative mt-2">
@@ -268,12 +268,12 @@ export function ItemEffectControls({ data, attacker, defender, scenario, dispatc
           </div>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4">
           <ConditionGroup title="Attacker item conditions" target="damage" loadout={attacker} items={data.items} scenario={scenario} dispatch={dispatch} />
           <ConditionGroup title="Defender item conditions" target="tank" loadout={defender} items={data.items} scenario={scenario} dispatch={dispatch} />
         </div>
 
-        <div className="grid gap-3 border-t border-border/70 pt-5 lg:grid-cols-2">
+        <div className="grid gap-3 border-t border-border/70 pt-5">
           {([
             ["Armor sunder", "Simulate an allied effect reducing the tank's Armor.", scenario.externalArmorSunder, "SET_EXTERNAL_ARMOR_SUNDER"],
             ["Magic shred", "Simulate an allied effect reducing the tank's Magic Resist.", scenario.externalMagicShred, "SET_EXTERNAL_MAGIC_SHRED"],
