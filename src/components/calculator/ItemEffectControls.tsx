@@ -52,8 +52,8 @@ function Toggle({
       <span
         aria-hidden
         className={cn(
-          "absolute top-0.5 size-3.5 rounded-full bg-white shadow-sm transition-transform",
-          checked ? "translate-x-0.5" : "translate-x-[17px]",
+          "absolute left-0.5 top-0.5 size-3.5 rounded-full bg-white shadow-sm transition-transform",
+          checked ? "translate-x-[17px]" : "translate-x-0",
         )}
       />
     </button>
