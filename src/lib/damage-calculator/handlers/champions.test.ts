@@ -32,3 +32,36 @@ test("every Set 17 catalog unit has an authored primary ability packet", () => {
     assert.ok(result.packets.length > 0, `${champion.id} returned no primary packet`);
   }
 });
+
+test("Corki models all 21 authored missiles", () => {
+  const catalog = readCalculatorCatalog(fallbackData as unknown as TftSet);
+  const corki = catalog.champions.find((champion) => champion.id === "TFT17_Corki");
+  assert.ok(corki);
+
+  const result = calculateAuthoredAbility({
+    champion: corki,
+    starLevel: 1,
+    attacker: {
+      hp: 1000,
+      attackDamage: 100,
+      abilityPower: 100,
+      attackSpeed: 1,
+      armor: 50,
+      magicResist: 50,
+      critChance: 0,
+      critMultiplier: 1.4,
+      initialMana: 0,
+      maxMana: 100,
+      manaRegen: 10,
+      range: 4,
+      damageAmp: 0,
+      durability: 0,
+      attackDamageReduction: 0,
+      omnivamp: 0,
+      manaGainMultiplier: 1,
+    },
+  });
+
+  assert.equal(result.packets.length, 21);
+  assert.equal(result.packets[0]?.rawDamage, 33);
+});
