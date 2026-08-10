@@ -2,6 +2,7 @@ import {
   AlertTriangle,
   ArrowRight,
   BarChart3,
+  ChevronRight,
   Clock3,
   Info,
   Sparkles,
@@ -11,6 +12,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import {
+  groupConsecutiveDamageEvents,
+  type DamageEventGroup,
+} from "@/lib/damage-calculator/event-groups";
 import type {
   CalculationStatus,
   ActiveItemEffect,
@@ -83,6 +88,62 @@ function EventLedger({ event }: { event: DamageEventResult }) {
       <p className="mt-2 text-[10px] text-muted-foreground">
         {event.effectiveResistance === null ? "True damage bypassed defenses" : `${number(event.effectiveResistance)} effective resistance · ${number(event.resistanceMultiplier, 3)}× multiplier`}
       </p>
+    </li>
+  );
+}
+
+function MultiHitEventLedger({ group }: { group: DamageEventGroup }) {
+  const firstEvent = group.events[0];
+  const hitCount = group.events.length;
+
+  return (
+    <li>
+      <details className="group rounded-md border border-border bg-background/60">
+        <summary className="flex cursor-pointer list-none flex-wrap items-start justify-between gap-2 rounded-md p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&::-webkit-details-marker]:hidden">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden />
+              <DamageTypeDot type={firstEvent.damageType} />
+              <h4 className="text-sm font-medium">{firstEvent.sourceName}</h4>
+              <Badge variant="outline" className="font-mono text-[9px] tabular-nums">
+                {hitCount} hits
+              </Badge>
+            </div>
+            <p className="mt-1 pl-6 text-[10px] uppercase tracking-wider text-muted-foreground">
+              {firstEvent.category.replace("-", " ")} · {firstEvent.damageType} · {firstEvent.crit === "ineligible" ? "cannot crit" : `${firstEvent.crit} crit`}
+            </p>
+          </div>
+          <span className="font-mono text-lg font-semibold tabular-nums">{number(group.aggregate.healthDamage)}</span>
+          <dl className="basis-full grid grid-cols-2 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-4">
+            {[
+              ["Raw", group.aggregate.rawDamage],
+              ["Mitigated", group.aggregate.mitigatedDamage],
+              ["Shield", group.aggregate.absorbedDamage],
+              ["Health", group.aggregate.healthDamage],
+            ].map(([label, value]) => (
+              <div key={label} className="bg-card px-2 py-1.5">
+                <dt className="text-[9px] uppercase tracking-wider text-muted-foreground">{label}</dt>
+                <dd className="font-mono text-xs font-semibold tabular-nums">{number(value as number)}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="basis-full text-[10px] text-muted-foreground">
+            Combined damage across {hitCount} hits · expand for the ordered breakdown
+          </p>
+        </summary>
+        <div className="border-t border-border p-3">
+          <ol className="space-y-2">
+            {group.events.map((event, index) => (
+              <li key={event.id}>
+                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Hit {index + 1} of {hitCount}
+                </p>
+                <ul><EventLedger event={event} /></ul>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </details>
     </li>
   );
 }
@@ -295,6 +356,7 @@ export function CalculationResults({ result }: CalculationResultsProps) {
   if (result.status === "incomplete") return <EmptyResults result={result} />;
 
   const status = STATUS_COPY[result.status];
+  const groupedEvents = groupConsecutiveDamageEvents(result.events);
   const castRaw = result.ability.reduce((total, event) => total + event.rawDamage, 0);
   const castMitigated = result.ability.reduce((total, event) => total + event.mitigatedDamage, 0);
   const castHealth = result.ability.reduce((total, event) => total + event.healthDamage, 0);
@@ -383,7 +445,11 @@ export function CalculationResults({ result }: CalculationResultsProps) {
                 <span className="font-mono text-[10px] text-muted-foreground">{result.events.length} event{result.events.length === 1 ? "" : "s"}</span>
               </div>
               {result.events.length > 0 ? (
-                <ul className="space-y-2">{result.events.map((event) => <EventLedger key={event.id} event={event} />)}</ul>
+                <ul className="space-y-2">
+                  {groupedEvents.map((group) => group.events.length > 1
+                    ? <MultiHitEventLedger key={group.events[0].id} group={group} />
+                    : <EventLedger key={group.events[0].id} event={group.events[0]} />)}
+                </ul>
               ) : (
                 <p className="rounded-md border border-dashed border-border p-4 text-center text-xs text-muted-foreground">No supported damage events were produced.</p>
               )}
