@@ -214,8 +214,9 @@ const ABILITY_HANDLERS: Readonly<Record<string, AbilityHandler>> = {
   TFT17_Corki: adApPhysicalDamage({
     adVariable: "MissileAD",
     apVariable: "MissileAP",
-    assumption: "Corki models one authored missile.",
-    excludedWarning: "Attack-triggered missile volleys, procs, and Meep cooldowns are excluded.",
+    hits: 21,
+    assumption: "Corki models all 21 authored missiles against the selected target.",
+    excludedWarning: "Lucky mega missiles, attack-triggered missile volleys, procs, and Meep cooldowns are excluded.",
   }),
   TFT17_Kindred: adApPhysicalDamage({
     adVariable: "ADDamage",
