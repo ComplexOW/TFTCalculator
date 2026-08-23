@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Calculator, LayoutGrid, Swords } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { DataCacheControls } from "@/components/data/DataCacheControls";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -48,31 +49,34 @@ export function AppNavigation() {
           </span>
         </Link>
 
-        <nav aria-label="Primary navigation">
-          <ul className="flex items-center gap-1">
-            {links.map(({ href, label, icon: Icon }) => {
-              const active = isActiveRoute(pathname, href);
+        <div className="flex items-center gap-1 sm:gap-2">
+          <nav aria-label="Primary navigation">
+            <ul className="flex items-center gap-1">
+              {links.map(({ href, label, icon: Icon }) => {
+                const active = isActiveRoute(pathname, href);
 
-              return (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    aria-label={label}
-                    aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "relative flex size-10 items-center justify-center gap-1.5 rounded-md text-xs font-medium text-muted-foreground outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring min-[400px]:w-auto min-[400px]:px-2.5 sm:px-3 sm:text-sm",
-                      active &&
-                        "bg-accent text-accent-foreground shadow-sm ring-1 ring-inset ring-border",
-                    )}
-                  >
-                    <Icon className="size-4" aria-hidden="true" />
-                    <span className="hidden min-[400px]:inline">{label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                return (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      aria-label={label}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "relative flex size-10 items-center justify-center gap-1.5 rounded-md text-xs font-medium text-muted-foreground outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring min-[400px]:w-auto min-[400px]:px-2.5 sm:px-3 sm:text-sm",
+                        active &&
+                          "bg-accent text-accent-foreground shadow-sm ring-1 ring-inset ring-border",
+                      )}
+                    >
+                      <Icon className="size-4" aria-hidden="true" />
+                      <span className="hidden min-[400px]:inline">{label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+          <DataCacheControls />
+        </div>
       </div>
     </header>
   );

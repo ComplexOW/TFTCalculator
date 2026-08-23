@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { DamageCalculator } from "@/components/calculator/DamageCalculator";
-import data from "@/data/tft-set.json";
-import type { TftSet } from "@/data/types";
 
 export const metadata: Metadata = {
   title: "Damage Calculator",
@@ -9,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DamageCalculatorPage() {
-  return <DamageCalculator data={data as unknown as TftSet} />;
+  return <DamageCalculator />;
 }

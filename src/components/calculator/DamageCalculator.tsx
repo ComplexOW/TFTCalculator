@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import type { TftSet } from "@/data/types";
+import { useTftData } from "@/components/data/tft-data-context";
 import { calculateDamage } from "@/lib/damage-calculator/engine";
 import {
   createDamageCalculationInput,
@@ -34,7 +34,8 @@ function optionalNumber(value: string) {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
-export function DamageCalculator({ data }: { data: TftSet }) {
+export function DamageCalculator() {
+  const { data } = useTftData();
   const [state, dispatch] = useReducer(
     damageCalculatorReducer,
     undefined,

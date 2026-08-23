@@ -5,13 +5,14 @@
   "scripts": {
     "predev": "tsx scripts/fetch-tft-data.ts",
     "dev": "next dev",
-    "prebuild": "tsx scripts/fetch-tft-data.ts",
+    "prebuild": "tsx scripts/fetch-tft-data.ts --refresh",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/lib/damage-calculator/*.test.ts",
-    "fetch-data": "tsx scripts/fetch-tft-data.ts"
+    "fetch-data": "tsx scripts/fetch-tft-data.ts --refresh",
+    "refresh-data": "tsx scripts/fetch-tft-data.ts --refresh"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
