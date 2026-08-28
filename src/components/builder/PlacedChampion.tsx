@@ -47,10 +47,16 @@ export function PlacedChampion({ cell, unit, champion }: Props) {
         sizes="(max-width: 768px) 80px, 120px"
         className="hex object-cover pointer-events-none"
       />
-      <div className="absolute inset-x-0 bottom-0 flex justify-center gap-0.5 pb-1">
-        {unit.items.map((itemId, i) => (
-          <ItemSlot key={i} cell={cell} slot={i} itemId={itemId} />
-        ))}
+      <div className="absolute inset-x-3 bottom-1.5 flex justify-center">
+        <div
+          className="flex gap-1 rounded-md border border-white/20 bg-zinc-950/90 p-1 shadow-lg shadow-black/60 backdrop-blur-sm"
+          role="list"
+          aria-label="Equipped items"
+        >
+          {unit.items.map((itemId, i) => (
+            <ItemSlot key={i} cell={cell} slot={i} itemId={itemId} />
+          ))}
+        </div>
       </div>
       <div
         className={clsx(

@@ -32,13 +32,14 @@ export function ItemSlot({ cell, slot, itemId }: Props) {
   };
 
   const buttonClassName = clsx(
-    "relative h-3.5 w-3.5 rounded-sm border border-zinc-600/80 bg-zinc-900/80 transition-colors",
-    isOver && "ring-1 ring-emerald-300 border-emerald-300",
-    item && "border-amber-400/70",
+    "relative h-6 w-6 rounded-sm border shadow-inner transition-colors",
+    "border-zinc-400/40 bg-zinc-950/95 hover:border-zinc-200/60",
+    isOver && "border-emerald-300 ring-2 ring-emerald-300",
+    item && "border-amber-300/90",
   );
 
   const inner = item ? (
-    <Image src={item.iconUrl} alt={item.name} fill sizes="14px" className="rounded-sm object-cover" />
+    <Image src={item.iconUrl} alt={item.name} fill sizes="24px" className="rounded-sm object-cover" />
   ) : null;
 
   const button = (
