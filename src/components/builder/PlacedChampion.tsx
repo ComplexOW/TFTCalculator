@@ -34,9 +34,7 @@ export function PlacedChampion({ cell, unit, champion }: Props) {
       {...listeners}
       {...attributes}
       className={clsx(
-        "hex relative grid h-full w-full place-items-center cursor-grab touch-none",
-        "ring-2 ring-inset",
-        costClass(champion.cost, "ring"),
+        "relative grid h-full w-full place-items-center cursor-grab touch-none",
       )}
       aria-label={`${champion.name}, cost ${champion.cost}`}
     >
@@ -47,9 +45,16 @@ export function PlacedChampion({ cell, unit, champion }: Props) {
         sizes="(max-width: 768px) 80px, 120px"
         className="hex object-cover pointer-events-none"
       />
+      <div
+        aria-hidden="true"
+        className={clsx(
+          "hex pointer-events-none absolute inset-0 ring-2 ring-inset",
+          costClass(champion.cost, "ring"),
+        )}
+      />
       <div className="absolute inset-x-3 bottom-1.5 flex justify-center">
         <div
-          className="flex gap-1 rounded-md border border-white/20 bg-zinc-950/90 p-1 shadow-lg shadow-black/60 backdrop-blur-sm"
+          className="flex shrink-0 gap-1 rounded-md border border-white/20 bg-zinc-950/90 p-1 shadow-lg shadow-black/60 backdrop-blur-sm"
           role="list"
           aria-label="Equipped items"
         >

@@ -32,7 +32,7 @@ export function ItemSlot({ cell, slot, itemId }: Props) {
   };
 
   const buttonClassName = clsx(
-    "relative h-6 w-6 rounded-sm border shadow-inner transition-colors",
+    "relative h-6 w-6 shrink-0 rounded-sm border shadow-inner transition-colors",
     "border-zinc-400/40 bg-zinc-950/95 hover:border-zinc-200/60",
     isOver && "border-emerald-300 ring-2 ring-emerald-300",
     item && "border-amber-300/90",

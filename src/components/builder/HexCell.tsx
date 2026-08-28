@@ -34,17 +34,22 @@ export function HexCell({ cell, row, col }: Props) {
       role="gridcell"
       aria-label={ariaLabel}
       className={clsx(
-        "hex relative grid place-items-center",
+        "relative grid place-items-center",
         "h-[var(--hex-h)] w-[var(--hex-w)]",
-        "bg-zinc-800/70 transition-colors",
-        isOver && !unit && "bg-emerald-700/60 ring-2 ring-emerald-300",
-        isOver && unit && "bg-amber-700/60",
       )}
     >
+      <div
+        aria-hidden="true"
+        className={clsx(
+          "hex pointer-events-none absolute inset-0 bg-zinc-800/70 transition-colors",
+          isOver && !unit && "bg-emerald-700/60 ring-2 ring-emerald-300",
+          isOver && unit && "bg-amber-700/60",
+        )}
+      />
       {unit && champion ? (
         <PlacedChampion cell={cell} unit={unit} champion={champion} />
       ) : (
-        <span className="text-xs text-zinc-500 select-none">
+        <span className="relative text-xs text-zinc-500 select-none">
           {row + 1}-{col + 1}
         </span>
       )}
