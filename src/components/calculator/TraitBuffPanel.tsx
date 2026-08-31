@@ -107,7 +107,7 @@ export function TraitBuffPanel({ data, buffs, onAdd, onSetTier, onRemove }: Trai
           </p>
         </div>
       </CardHeader>
-      <CardContent className="grid gap-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+      <CardContent className="grid gap-5">
         <div className="space-y-3">
           <div className="flex gap-2" aria-label="Trait buff target">
             {(["damage", "tank"] as const).map((option) => (

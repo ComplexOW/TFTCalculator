@@ -76,7 +76,7 @@ export function DamageCalculator({ data }: { data: TftSet }) {
   return (
     <main className="min-h-[calc(100dvh-3.5rem)] bg-background text-foreground">
       <div className="border-b border-border bg-card/60 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <div className="mx-auto flex max-w-[90rem] items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Link href="/" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "text-muted-foreground")}>
             <ArrowLeft aria-hidden />
             Team builder
@@ -87,7 +87,7 @@ export function DamageCalculator({ data }: { data: TftSet }) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:py-8">
+      <div className="mx-auto max-w-[90rem] space-y-6 px-4 py-6 sm:px-6 lg:py-8">
         <header className="relative overflow-hidden rounded-md border border-border bg-card px-5 py-6 sm:px-7">
           <div className="pointer-events-none absolute inset-y-0 right-0 w-2/5 bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.14),transparent_68%)]" />
           <div className="relative flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -108,125 +108,131 @@ export function DamageCalculator({ data }: { data: TftSet }) {
           </div>
         </header>
 
-        <section aria-labelledby="matchup-heading">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <div>
-              <h2 id="matchup-heading" className="text-sm font-semibold">Matchup loadout</h2>
-              <p className="text-xs text-muted-foreground">Choose one unit for each combat role.</p>
-            </div>
-            <Badge variant={matchupReady ? "default" : "outline"}>{matchupReady ? "Matchup ready" : "2 heroes required"}</Badge>
-          </div>
-          <div className="grid items-stretch gap-4 lg:grid-cols-2">
-            <HeroSlot {...slotProps("tank")} />
-            <HeroSlot {...slotProps("damage")} />
-          </div>
-        </section>
-
-        <Card className="border border-border bg-card/80">
-          <CardHeader className="flex-row items-start gap-3 border-b border-border/70">
-            <div className="grid size-9 shrink-0 place-items-center rounded-md border border-border bg-background/70 text-rose-300">
-              <Gauge className="size-4" aria-hidden />
-            </div>
-            <div>
-              <h2 className="text-base font-semibold">Combat scenario</h2>
-              <p className="text-xs text-muted-foreground">Set starting resources and health used by the combat timeline.</p>
-            </div>
-          </CardHeader>
-          <CardContent className="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
-            <fieldset>
-              <legend className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Crit handling</legend>
-              <div className="grid gap-2 sm:grid-cols-3">
-                {CRIT_MODES.map((mode) => (
-                  <button
-                    key={mode.value}
-                    type="button"
-                    onClick={() => dispatch({ type: "SET_CRIT_MODE", critMode: mode.value })}
-                    aria-pressed={state.scenario.critMode === mode.value}
-                    className={cn(
-                      "rounded-md border px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                      state.scenario.critMode === mode.value
-                        ? "border-rose-500/50 bg-rose-500/10"
-                        : "border-border bg-background/60 hover:bg-muted",
-                    )}
-                  >
-                    <span className="block text-xs font-medium">{mode.label}</span>
-                    <span className="mt-0.5 block text-[10px] text-muted-foreground">{mode.description}</span>
-                  </button>
-                ))}
+        <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+          <div className="space-y-6 lg:sticky lg:top-14 lg:max-h-[calc(100dvh-3.5rem)] lg:overflow-y-auto lg:pr-1">
+            <section aria-labelledby="matchup-heading">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <div>
+                  <h2 id="matchup-heading" className="text-sm font-semibold">Matchup loadout</h2>
+                  <p className="text-xs text-muted-foreground">Choose one unit for each combat role.</p>
+                </div>
+                <Badge variant={matchupReady ? "default" : "outline"}>{matchupReady ? "Matchup ready" : "2 heroes required"}</Badge>
               </div>
-            </fieldset>
+              <div className="grid items-stretch gap-4">
+                <HeroSlot {...slotProps("tank")} />
+                <HeroSlot {...slotProps("damage")} />
+              </div>
+            </section>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-              <label className="space-y-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Attacker mana
-                <Input
-                  type="number"
-                  min={0}
-                  max={attacker?.stats?.maxMana}
-                  value={state.scenario.attackerStartingMana ?? ""}
-                  onChange={(event) => dispatch({ type: "SET_ATTACKER_STARTING_MANA", value: optionalNumber(event.target.value) })}
-                  placeholder={attacker?.stats ? String(attacker.stats.startingMana) : "Auto"}
-                  aria-describedby="attacker-mana-hint"
-                  className="font-mono text-foreground"
-                />
-                <span id="attacker-mana-hint" className="block normal-case tracking-normal text-muted-foreground">Blank uses unit start mana.</span>
-              </label>
-              <label className="space-y-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Attacker health
-                <Input
-                  type="number"
-                  min={0}
-                  value={state.scenario.attackerCurrentHealth ?? ""}
-                  onChange={(event) => dispatch({ type: "SET_ATTACKER_CURRENT_HEALTH", value: optionalNumber(event.target.value) })}
-                  placeholder="Auto"
-                  className="font-mono text-foreground"
-                />
-                <span className="block normal-case tracking-normal text-muted-foreground">Used for holder health thresholds.</span>
-              </label>
-              <label className="space-y-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Defender health
-                <Input
-                  type="number"
-                  min={0}
-                  value={state.scenario.defenderCurrentHealth ?? ""}
-                  onChange={(event) => dispatch({ type: "SET_DEFENDER_CURRENT_HEALTH", value: optionalNumber(event.target.value) })}
-                  placeholder="Auto"
-                  className="font-mono text-foreground"
-                />
-                <span className="block normal-case tracking-normal text-muted-foreground">Blank uses scaled max HP.</span>
-              </label>
-              <label className="space-y-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Defender shield
-                <Input
-                  type="number"
-                  min={0}
-                  value={state.scenario.defenderShield}
-                  onChange={(event) => dispatch({ type: "SET_DEFENDER_SHIELD", value: optionalNumber(event.target.value) ?? 0 })}
-                  className="font-mono text-foreground"
-                />
-                <span className="block normal-case tracking-normal text-muted-foreground">Absorbs mitigated damage first.</span>
-              </label>
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="border border-border bg-card/80">
+              <CardHeader className="flex-row items-start gap-3 border-b border-border/70">
+                <div className="grid size-9 shrink-0 place-items-center rounded-md border border-border bg-background/70 text-rose-300">
+                  <Gauge className="size-4" aria-hidden />
+                </div>
+                <div>
+                  <h2 className="text-base font-semibold">Combat scenario</h2>
+                  <p className="text-xs text-muted-foreground">Set starting resources and health used by the combat timeline.</p>
+                </div>
+              </CardHeader>
+              <CardContent className="grid gap-5">
+                <fieldset>
+                  <legend className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Crit handling</legend>
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    {CRIT_MODES.map((mode) => (
+                      <button
+                        key={mode.value}
+                        type="button"
+                        onClick={() => dispatch({ type: "SET_CRIT_MODE", critMode: mode.value })}
+                        aria-pressed={state.scenario.critMode === mode.value}
+                        className={cn(
+                          "rounded-md border px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                          state.scenario.critMode === mode.value
+                            ? "border-rose-500/50 bg-rose-500/10"
+                            : "border-border bg-background/60 hover:bg-muted",
+                        )}
+                      >
+                        <span className="block text-xs font-medium">{mode.label}</span>
+                        <span className="mt-0.5 block text-[10px] text-muted-foreground">{mode.description}</span>
+                      </button>
+                    ))}
+                  </div>
+                </fieldset>
 
-        <ItemEffectControls
-          data={data}
-          attacker={state.damage}
-          defender={state.tank}
-          scenario={state.scenario}
-          dispatch={dispatch}
-        />
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <label className="space-y-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Attacker mana
+                    <Input
+                      type="number"
+                      min={0}
+                      max={attacker?.stats?.maxMana}
+                      value={state.scenario.attackerStartingMana ?? ""}
+                      onChange={(event) => dispatch({ type: "SET_ATTACKER_STARTING_MANA", value: optionalNumber(event.target.value) })}
+                      placeholder={attacker?.stats ? String(attacker.stats.startingMana) : "Auto"}
+                      aria-describedby="attacker-mana-hint"
+                      className="font-mono text-foreground"
+                    />
+                    <span id="attacker-mana-hint" className="block normal-case tracking-normal text-muted-foreground">Blank uses unit start mana.</span>
+                  </label>
+                  <label className="space-y-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Attacker health
+                    <Input
+                      type="number"
+                      min={0}
+                      value={state.scenario.attackerCurrentHealth ?? ""}
+                      onChange={(event) => dispatch({ type: "SET_ATTACKER_CURRENT_HEALTH", value: optionalNumber(event.target.value) })}
+                      placeholder="Auto"
+                      className="font-mono text-foreground"
+                    />
+                    <span className="block normal-case tracking-normal text-muted-foreground">Used for holder health thresholds.</span>
+                  </label>
+                  <label className="space-y-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Defender health
+                    <Input
+                      type="number"
+                      min={0}
+                      value={state.scenario.defenderCurrentHealth ?? ""}
+                      onChange={(event) => dispatch({ type: "SET_DEFENDER_CURRENT_HEALTH", value: optionalNumber(event.target.value) })}
+                      placeholder="Auto"
+                      className="font-mono text-foreground"
+                    />
+                    <span className="block normal-case tracking-normal text-muted-foreground">Blank uses scaled max HP.</span>
+                  </label>
+                  <label className="space-y-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Defender shield
+                    <Input
+                      type="number"
+                      min={0}
+                      value={state.scenario.defenderShield}
+                      onChange={(event) => dispatch({ type: "SET_DEFENDER_SHIELD", value: optionalNumber(event.target.value) ?? 0 })}
+                      className="font-mono text-foreground"
+                    />
+                    <span className="block normal-case tracking-normal text-muted-foreground">Absorbs mitigated damage first.</span>
+                  </label>
+                </div>
+              </CardContent>
+            </Card>
 
-        <TraitBuffPanel
-          data={data}
-          buffs={state.traitBuffs}
-          onAdd={(buff) => dispatch({ type: "ADD_TRAIT_BUFF", buff })}
-          onSetTier={(target, traitId, tierMin) => dispatch({ type: "SET_TRAIT_TIER", target, traitId, tierMin })}
-          onRemove={(target, traitId) => dispatch({ type: "REMOVE_TRAIT_BUFF", target, traitId })}
-        />
+            <ItemEffectControls
+              data={data}
+              attacker={state.damage}
+              defender={state.tank}
+              scenario={state.scenario}
+              dispatch={dispatch}
+            />
 
-        <CalculationResults result={result} />
+            <TraitBuffPanel
+              data={data}
+              buffs={state.traitBuffs}
+              onAdd={(buff) => dispatch({ type: "ADD_TRAIT_BUFF", buff })}
+              onSetTier={(target, traitId, tierMin) => dispatch({ type: "SET_TRAIT_TIER", target, traitId, tierMin })}
+              onRemove={(target, traitId) => dispatch({ type: "REMOVE_TRAIT_BUFF", target, traitId })}
+            />
+          </div>
+
+          <div className="space-y-6 lg:sticky lg:top-14 lg:max-h-[calc(100dvh-3.5rem)] lg:overflow-y-auto lg:pr-1">
+            <CalculationResults result={result} />
+          </div>
+        </div>
       </div>
     </main>
   );

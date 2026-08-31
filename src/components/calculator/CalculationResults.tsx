@@ -395,7 +395,7 @@ export function CalculationResults({ result }: CalculationResultsProps) {
             </div>
           )}
 
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3 md:grid-cols-2">
             <div className="rounded-md border border-rose-500/30 bg-rose-500/[0.07] p-3">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-200/70">Opening basic</p>
               <p className="mt-2 font-mono text-2xl font-semibold tabular-nums">{number(result.basicAttack?.healthDamage ?? 0)}</p>
@@ -430,7 +430,7 @@ export function CalculationResults({ result }: CalculationResultsProps) {
           <TimelineResults checkpoints={result.checkpoints} timeToKill={result.timeToKillSeconds} />
 
           {(result.tankStats || result.defenseDebuffs) && (
-            <div className="grid gap-3 lg:grid-cols-2">
+            <div className="grid gap-3">
               {result.tankStats && <TankSummary stats={result.tankStats} />}
               {result.defenseDebuffs && <DefenseDebuffs summary={result.defenseDebuffs} />}
             </div>
@@ -438,7 +438,7 @@ export function CalculationResults({ result }: CalculationResultsProps) {
 
           <ActiveEffects effects={result.activeItemEffects} />
 
-          <div className="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)]">
+          <div className="grid gap-5">
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
                 <h3 className="text-xs font-semibold uppercase tracking-wider">Damage ledger</h3>
