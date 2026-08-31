@@ -18,6 +18,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## TFT data cache
+
+During development, the fetch script (`scripts/fetch-tft-data.ts`) reuses the existing
+`src/data/tft-set.json` cache instead of calling the CommunityDragon API every time you
+start the dev server. Use `--refresh` (or `npm run refresh-data`) to force a fresh fetch.
+
+The app also has a data-cache control in the navigation bar:
+
+- Toggle **Use cached TFT data** to load from the browser cache (or bundled data) instead of fetching live data.
+- Click **Refresh cache** to fetch the latest data, update the local cache, and update the UI immediately.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More

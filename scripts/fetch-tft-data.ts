@@ -26,6 +26,7 @@ const LOCALE = "en_us";
 const PATCH_PATTERN = /^(?:latest|pbe|\d+\.\d+(?:\.\d+)?)$/;
 const OUT_PATH = resolve(__dirname, "..", "src", "data", "tft-set.json");
 const FALLBACK_PATH = resolve(__dirname, "..", "src", "data", "tft-set.fallback.json");
+const REFRESH = process.argv.includes("--refresh") || process.env.TFT_REFRESH === "1";
 const MINIMUM_COVERAGE = {
   champions: 30,
   traits: 10,
@@ -686,6 +687,23 @@ function restoreLastKnownGood(cause: unknown, requested: RequestedSnapshot) {
 
 async function main() {
   const { patch, sourcePatch, setNumber, setMutator, minimumCoverage } = readConfiguration();
+  const requested = { patch, sourcePatch, setMutator, setNumber };
+
+  if (!REFRESH) {
+    const cached = parseProjectionFile(OUT_PATH);
+    if (cached && matchesRequestedSnapshot(cached, requested)) {
+      console.log(
+        `[fetch-tft-data] using cached ${OUT_PATH} (${describeSnapshot(cached)})`,
+      );
+      return;
+    }
+    if (cached) {
+      console.warn(
+        `[fetch-tft-data] ignoring mismatched cache (${describeSnapshot(cached)})`,
+      );
+    }
+  }
+
   const sourceUrl = `https://raw.communitydragon.org/${sourcePatch}/cdragon/tft/${LOCALE}.json`;
   console.log(`[fetch-tft-data] fetching ${sourceUrl}`);
 

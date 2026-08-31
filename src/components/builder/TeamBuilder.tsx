@@ -21,7 +21,7 @@ import {
   useTeamBuilder,
   type HexId,
 } from "./state";
-import type { TftSet } from "@/data/types";
+import { useTftData } from "@/components/data/tft-data-context";
 import { HexBoard } from "./HexBoard";
 import { ChampionPicker } from "./ChampionPicker";
 import { TraitsPanel } from "./TraitsPanel";
@@ -154,7 +154,9 @@ function BuilderShell() {
   );
 }
 
-export function TeamBuilder({ data }: { data: TftSet }) {
+export function TeamBuilder() {
+  const { data } = useTftData();
+
   return (
     <TeamBuilderProvider data={data}>
       <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col">
